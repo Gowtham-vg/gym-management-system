@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Plan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, black, black, white, cyan);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 20px;
+            background: linear-gradient(to bottom right, black, black, white, cyan);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .diet-card {
+            background: linear-gradient(to bottom right, cyan, black, white, black);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, background 0.3s;
+            margin: 15px;
+        }
+        .diet-card:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to bottom right, black, black, white, cyan);
+        }
+        .diet-title {
+            color: cyan;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .diet-content {
+            font-size: 1.2em;
+        }
+        .diet-icons {
+            font-size: 2em;
+        }
+        .swipe-btn {
+            display: inline-block;
+            padding: 15px 25px;
+            background: cyan;
+            color: black;
+            font-size: 1.2em;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.5s ease-in-out, background 0.3s;
+        }
+        .swipe-btn:hover {
+            transform: translateX(10px);
+            background: white;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Personalized Diet Plan</h1>
+    </header>
+    <div class="container">
+        <div class="diet-card">
+            <h2 class="diet-title">Day 1 Meal Plan 🍽️</h2>
+            <p class="diet-content">Breakfast: Oats & Bananas 🍌</p>
+            <p class="diet-content">Lunch: Grilled Chicken & Brown Rice 🍗🍚</p>
+            <p class="diet-content">Evening Snack: Almonds & Green Tea 🌿</p>
+            <p class="diet-content">Dinner: Paneer Salad & Soup 🥗🍵</p>
+        </div>
+        <a href="{{ url_for('workout_details') }}" class="swipe-btn">Back to Workouts ⬅️</a>
+    </div>
+</body>
+</html>

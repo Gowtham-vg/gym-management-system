@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Plans</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: cyan;
+            --bg-color: black;
+            --text-color: white;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.5s;
+        }
+        header {
+            padding: 20px;
+            background: var(--primary-color);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .goal-selection {
+            margin: 20px 0;
+        }
+        .goal-btn {
+            background: var(--primary-color);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .goal-btn:hover {
+            background: white;
+            color: black;
+            transform: scale(1.1);
+            box-shadow: 0px 0px 15px var(--primary-color);
+        }
+        .progress-chart {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+        }
+        .difficulty-container {
+            margin: 20px 0;
+        }
+        .difficulty-btn {
+            background: var(--primary-color);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .difficulty-btn:hover {
+            background: white;
+            color: black;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Personalized Workout Plans</h1>
+        <button class="mode-toggle" onclick="toggleMode()">Dark/Light Mode</button>
+    </header>
+    <div class="container">
+        <div class="goal-selection">
+            <h2>Select Your Fitness Goal</h2>
+            <button class="goal-btn">Weight Loss</button>
+            <button class="goal-btn">Muscle Gain</button>
+            <button class="goal-btn">Endurance</button>
+            <button class="goal-btn">Flexibility</button>
+        </div>
+
+        <div class="difficulty-container">
+            <h2>Select Difficulty Level</h2>
+            <button class="difficulty-btn">Beginner</button>
+            <button class="difficulty-btn">Intermediate</button>
+            <button class="difficulty-btn">Advanced</button>
+        </div>
+
+        <div class="progress-chart">
+            <h2>Your Progress</h2>
+            <canvas id="progressChart"></canvas>
+        </div>
+    </div>
+    <div class="nav-buttons">
+        <a href="{{ url_for('user_dashboard') }}">Back</a>
+        <a href="/">Home</a>
+    </div>
+    <script>
+        function toggleMode() {
+            let root = document.documentElement;
+            let currentBg = getComputedStyle(root).getPropertyValue('--bg-color').trim();
+            if (currentBg === 'black') {
+                root.style.setProperty('--bg-color', 'white');
+                root.style.setProperty('--text-color', 'black');
+            } else {
+                root.style.setProperty('--bg-color', 'black');
+                root.style.setProperty('--text-color', 'white');
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            let ctx = document.getElementById('progressChart').getContext('2d');
+            let progressChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Progress',
+                        data: [20, 40, 60, 80],
+                        backgroundColor: 'cyan',
+                        borderColor: 'white',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

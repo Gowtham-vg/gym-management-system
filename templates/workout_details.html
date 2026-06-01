@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: black;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .video-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .video-wrapper {
+            background: black;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 255, 255, 0.7);
+            width: 60%;
+        }
+        video {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .video-btn {
+            display: inline-block;
+            background: cyan;
+            color: black;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.3s;
+            margin-top: 15px;
+        }
+        .video-btn:hover {
+            background: white;
+            color: black;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Workout Details</h1>
+        <p>Selected Workout: {{ workout.name }}</p>
+        <p>Description: {{ workout.description }}</p>
+        <p>Exercises: {{ workout.exercises }}</p>
+        <p>Frequency: {{ workout.frequency }}</p>
+
+        <h2>Workout Video</h2>
+        {% if video_urls and video_urls|length > 0 %}
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <video controls>
+                        <source src="{{ url_for('serve_video', filename=video_urls[0].split('/')[-1]) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        {% else %}
+            <p>No video available for this workout.</p>
+        {% endif %}
+        
+        <a href="{{ url_for('workout_plans') }}" class="video-btn">Back to Workout Plans</a>
+    </div>
+</body>
+</html>

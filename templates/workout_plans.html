@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Plans</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary-color: cyan;
+            --secondary-color: black;
+            --text-color: white;
+            --hover-color: rgba(0, 255, 255, 0.7);
+            --button-text-color: black;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--secondary-color);
+            color: var(--text-color);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+            background-image: url(/static/images/samuel-girven-fqMu99l8sqo-unsplash.jpg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--button-text-color);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, var(--hover-color), var(--secondary-color));
+            transform: scale(1.05);
+        }
+
+        .workout-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px var(--hover-color);
+            margin: 20px;
+            text-align: left;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-button {
+            position:fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--button-text-color);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, var(--hover-color), var(--secondary-color));
+            transform: scale(1.05);
+        }
+
+        .footer {
+            position:relative;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Workout Plans</h1>
+        {% for workout in workouts %}
+            <div class="workout-card">
+                <h3>{{ workout.name }}</h3>
+                <p>🔥 {{ workout.description }}</p>
+                <p>🏋️‍♂️ Exercises: {{ workout.exercises }}</p>
+                <p>📅 {{ workout.frequency }}</p>
+                <a href="{{ url_for('workout_details', workout_id=workout.id) }}" class="btn">
+                    <i class="fas fa-dumbbell"></i> Select
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{{ url_for('user_dashboard') }}" class="back-button">⬅ Back to Dashboard</a>
+    <div class="footer">&copy; 2025 SG Gym. All rights reserved.</div>
+</body>
+</html>

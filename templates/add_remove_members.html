@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add or Remove Members</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(to right, #11cb4c, #25c4da);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #49c651;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .buttons button:hover {
+            background-color: #3aa447;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #49c651;
+            color: #000000;
+        }
+
+        tr:nth-child(even) {
+            background-color: #26c1c1;
+        }
+
+        .edit-form input {
+            padding: 8px;
+            margin: 5px;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .edit-form button {
+            padding: 10px 20px;
+            background-color: #49c651;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-form button:hover {
+            background-color: #3aa447;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add or Remove Members</h2>
+        <div class="buttons">
+            <button onclick="window.location.href='/register'">Add Members</button>
+            <button id="remove-btn">Remove Members</button>
+        </div>
+        <form id="remove-form" method="POST" action="/remove_members">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Mobile</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr id="user-{{ user.id }}">
+                        <td><input type="checkbox" name="selected_members" value="{{ user.id }}"></td>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.gender }}</td>
+                        <td>{{ user.age }}</td>
+                        <td>{{ user.mobile }}</td>
+                        <td><button type="button" class="edit-btn" onclick="editMember({{ user.id }})">Edit</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+        <div id="edit-form-container" style="display: none;">
+            <h3>Edit Member</h3>
+            <form id="edit-form" method="POST" action="/edit_member">
+                <div class="edit-form">
+                    <input type="hidden" id="edit-id" name="id">
+                    <input type="text" id="edit-name" name="name" placeholder="Name">
+                    <input type="text" id="edit-username" name="username" placeholder="Username">
+                    <input type="text" id="edit-gender" name="gender" placeholder="Gender">
+                    <input type="number" id="edit-age" name="age" placeholder="Age">
+                    <input type="text" id="edit-mobile" name="mobile" placeholder="Mobile">
+                    <button type="submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('remove-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to remove the selected members?')) {
+                document.getElementById('remove-form').submit();
+            }
+        });
+
+
+        function editMember(userId) {
+            // Get the user data from the table row
+            const row = document.getElementById(`user-${userId}`);
+            const name = row.cells[2].textContent;
+            const username = row.cells[3].textContent;
+            const gender = row.cells[4].textContent;
+            const age = row.cells[5].textContent;
+            const mobile = row.cells[6].textContent;
+
+            // Set the form inputs with the current user data
+            document.getElementById('edit-id').value = userId;
+            document.getElementById('edit-name').value = name;
+            document.getElementById('edit-username').value = username;
+            document.getElementById('edit-gender').value = gender;
+            document.getElementById('edit-age').value = age;
+            document.getElementById('edit-mobile').value = mobile;
+
+            // Show the edit form
+            document.getElementById('edit-form-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

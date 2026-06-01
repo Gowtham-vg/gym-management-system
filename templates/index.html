@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GYM MANAGEMENT</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+ 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+     .log-option {
+        position: fixed;
+        margin-top: 7%;
+        right: 20px;
+        display: none; /* Hide the buttons by default */
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 10px;
+    }
+
+    .log-option button {
+        padding: 10px 15px;
+        font-size: 14px;
+        border: 5px solid #020601;
+        border-radius: 15px;
+        background-color: #000000;
+        cursor: pointer;
+        color:#ffffff;
+         
+        display: inline-block;
+    }
+
+    .log-option button:hover {
+        background-origin: var(--main-color);
+        color: var(--text-color);
+        box-shadow: 0 0 18px var(--main-color);/* Change to your desired hover color */
+        transform: scale(1.05);
+       
+    }
+
+    .login-icon {
+        cursor: pointer;
+    }
+
+    </style>
+ </head>
+<body>
+    <!--HEADER SECTION-->
+    <header>
+        
+        <a href ="#home" class="logo">SG GYM <span>Fitness</span></a>
+
+        <div class="bx-menu" id="menu-icon">
+             
+                <i class="fa-solid fa-bars-staggered"></i>   
+            
+        </div>
+        
+
+        <ul class="navbar">
+             
+                <li id="i1">
+                    <i class="fa-solid fa-cart-shopping" onclick="redirectToEquipment()"></i>
+                </li>
+
+            <li> <a href="#home">HOME</a></li>
+            <li> <a href="#services">SERVICE</a></li>
+            <li> <a href="#about">ABOUT</a></li>
+            <li> <a href="#plans">PRICING</a></li>
+            <li> <a href="#review">REVIEW</a></li>
+        </ul>     
+         <ul class="n2">  
+             <li>  <div class="login-icon" onclick="toggleLogOption()">
+                
+                    <i class="fa-regular fa-user"><span> Login</span> </i>
+                </li>
+            </ul>
+                
+        
+     
+    </header>
+  
+    <div class="log-option" id="logOption">
+        <button onclick="location.href='/admin/login'">Admin </button>
+        <button onclick="location.href='/login'">User </button>
+    </div>
+ <!-- Home Section -->
+
+ <section id="home" class="home">
+    <div class="home-content" data-aos="zoom-in">
+        <h3>Build Your</h3>
+        <h1>Dream Physique</h1><br><br><br>
+        <h3><span class="multiple-text"></span></h3>
+        <p>"Train insane or remain the same"</p>
+
+        <a href="/login" class="btn">Join Us</a>
+    </div>
+
+    <div class="home-carousel">
+        <button class="prev-btn">&lt;</button>
+        <div class="carousel-container">
+            <img src="/static/images/p1.jpg" alt="Image 1">
+            <img src="/static/images/page1.jpg" alt="Image 2">
+            <img src="/static/images/log.jpg" alt="Image 3">
+        </div>
+        <button class="next-btn">&gt;</button>
+      </div>
+</section>
+
+<!-- services Section Code -->
+
+    <section class="services" id="services">
+
+        <h2 class="heading" data-aos="zoom-in-down">Our <span>Services</span></h2>
+
+        <div class="services-content" data-aos="zoom-in-up">
+            <div class="row">
+                <img src="/static/images/physical-fittness.jpeg" alt="no-image">
+
+                <h4>Physical Fitness</h4>
+            </div>
+
+            <div class="row">
+                <img src="/static/images/weight-gain.jpg" alt="no-image">
+
+                <h4>Weight Gain</h4>
+            </div>
+
+            <div class="row">
+                <img src="/static/images/strength-tranning1.jpeg" alt="no-image">
+
+                <h4>Strength Training</h4>
+            </div>
+
+            <div class="row">
+                <img src="/static/images/fat-loss.jpg" alt="no-image">
+
+                <h4>Fat Lose</h4>
+            </div>
+
+            <div class="row">
+                <img src="/static/images/weight-lifting.jpeg" alt="no-image">
+
+                <h4>Weightlifting</h4>
+            </div>
+
+            <div class="row">
+                <img src="/static/images/running.jpeg" alt="">
+
+                <h4>Running</h4>
+            </div>
+        </div>
+    </section>
+
+<!-- About Section -->
+<section id="about" class="about">
+    <div class="about-img" data-aos="zoom-in-down">
+        <img src="" alt="">
+    </div>
+
+    <div class="about-content" data-aos="zoom-in-up">
+        <h2 class="heading">Why Choose Us?</h2>
+        <p>Our diverse membership base creates a friendly and supportive atmosphere, where you can make friends and
+            stay motivated.</p>
+        <p>Unlock your potential with our expert Personal Trainers.</p>
+        <p>Elevate your fitness with practice sessions.</p>
+        <p>We provide Supportive management, for your fitness success.</p>
+        <a href="#" class="btn">Book A Free Class</a>
+    </div>
+</section>
+
+<!-- Pricing Section Code -->
+
+<section class="plans" id="plans">
+    <h2 class="heading" data-aos="zoom-in-down">Our <span>Plans</span></h2>
+
+
+    <div class="plans-content" data-aos="zoom-in-up">
+        <div class="box">
+            <h3>BASIC</h3>
+            <h2><span>$100/Month</span></h2>
+            <ul>
+                <li>Smart workout plan</li>
+                <li>At home workouts</li>
+            </ul>
+            <a href="{{ url_for('payment_page') }}">Pay Now</a>
+
+                Join Now
+                <i class='bx bx-right-arrow-alt'></i>
+            </a>
+        </div>
+        <div class="box">
+            <h3>PRO</h3>
+            <h2><span>$150/Month</span></h2>
+            <ul>
+                <li>Pro GYMS</li>
+                <li>Smart workout plan</li>
+                <li>At home workouts</li>
+            </ul>
+            <a href="#">
+                Join Now
+                <i class='bx bx-right-arrow-alt'></i>
+            </a>
+        </div>
+        <div class="box">
+            <h3>PREMIUM</h3>
+            <h2><span>$300/Month</span></h2>
+            <ul>
+                <li>ELITE Gyms & Classes</li>
+                <li>Pro GYMS</li>
+                <li>Smart workout plan</li>
+                <li>At home workouts</li>
+                <li>Personal Training</li>
+            </ul>
+            <a href="#">
+                Join Now
+                <i class='bx bx-right-arrow-alt'></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Review Section -->
+
+<section id="review" class="review">
+    <div class="review-box">
+        <h2 class="heading" data-aos="zoom-in-down">Client Reviews</h2>
+
+        <div class="wrapper" data-aos="zoom-in-up">
+            <div class="review-item">
+                <img src="" alt="">
+                <h2>John</h2>
+                <div class="rating">
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                </div>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius reiciendis consequatur officia
+                    recusandae porro at?</p>
+            </div>
+
+            <div class="review-item">
+                <img src="" alt="">
+                <h2>Steve</h2>
+                <div class="rating">
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                </div>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius reiciendis consequatur officia
+                    recusandae porro at?</p>
+            </div>
+
+            <div class="review-item">
+                <img src="" alt="">
+                <h2>David</h2>
+                <div class="rating">
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                    <i class='bx bxs-star' id="star"></i>
+                </div>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius reiciendis consequatur officia
+                    recusandae porro at?</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer Section -->
+
+<footer class="footer">
+    <div class="social">
+        <a href="#"><i class='bx bxl-instagram-alt'></i></a>
+        <a href="#"><i class='bx bxl-facebook-square'></i></a>
+        <a href="#"><i class='bx bxl-linkedin-square'></i></a>
+    </div>
+
+    <p class="copyright">
+        &copy; SG Fitness 2024 - All Rights Reserved
+    </p>
+</footer>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    AOS.init({
+        offset: 300,
+        duration: 1400,
+    });
+</script>
+
+<script>
+    function toggleLogOption() {
+        const logOption = document.getElementById('logOption');
+        if (logOption.style.display === 'none' || logOption.style.display === '') {
+            logOption.style.display = 'flex'; // Show buttons
+        } else {
+            logOption.style.display = 'none'; // Hide buttons
+        }
+    }
+
+    // Hide the log-option if clicked anywhere outside
+    document.addEventListener('click', (e) => {
+        const logOption = document.getElementById('logOption');
+        const loginIcon = document.querySelector('.login-icon');
+        if (!logOption.contains(e.target) && !loginIcon.contains(e.target)) {
+            logOption.style.display = 'none';
+        }
+    });
+</script>
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+<script src="/static/js/script1.js"></script>
+
+ 
+<script>
+    function redirectToEquipment() {
+        window.location.href = "/equipment";
+    }
+</script>
+
+<!--img script-->
+<script>
+    const carouselContainer = document.querySelector('.carousel-container');
+    const images = document.querySelectorAll('.carousel-container img');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    
+    let currentIndex = 0; // Current image index
+    const totalImages = images.length;
+    
+    // Set container width dynamically based on the number of images
+    carouselContainer.style.width = `${800 * totalImages}px`; // Each image is 800px wide
+    
+    // Function to update the carousel position
+    function updateCarousel() {
+        const offset = -currentIndex * 800; // Shift by 800px per image
+        carouselContainer.style.transform = `translateX(${offset}px)`;
+    }
+    
+    // Move to the next image
+    function moveToNext() {
+        currentIndex = (currentIndex + 1) % totalImages; // Wrap around to the start
+        updateCarousel();
+    }
+    
+    // Move to the previous image
+    function moveToPrev() {
+        currentIndex = (currentIndex - 1 + totalImages) % totalImages; // Wrap around to the end
+        updateCarousel();
+    }
+    
+    // Auto-slide every 3 seconds
+    let autoSlide = setInterval(moveToNext, 3000);
+    
+    // Add event listeners for buttons
+    nextBtn.addEventListener('click', () => {
+        clearInterval(autoSlide); // Pause auto-slide
+        moveToNext();
+        autoSlide = setInterval(moveToNext, 3000); // Restart auto-slide
+    });
+    
+    prevBtn.addEventListener('click', () => {
+        clearInterval(autoSlide); // Pause auto-slide
+        moveToPrev();
+        autoSlide = setInterval(moveToNext, 3000); // Restart auto-slide
+    });
+    
+        </script>  
+
+    
+</body>
+</html>

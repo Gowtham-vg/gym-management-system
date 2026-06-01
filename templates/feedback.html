@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Page</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        .feedback-section {
+    width: 100%;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.6);
+    padding: 30px 0;
+    position: relative;
+    
+    /* 👇 Add this spacing */
+    margin: 80px auto; /* Top & bottom spacing */
+    max-width: 95%; /* Optional: to keep it centered */
+}
+
+.feedback-section h2 {
+    text-align: center;
+    color: cyan;
+    margin-bottom: 30px;
+}
+
+
+.feedback-container {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: scroll-left 25s linear infinite;
+}
+
+.feedback-card {
+    background: rgba(0, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: white;
+    padding: 20px;
+    min-width: 280px;
+    max-width: 300px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);
+    transition: transform 0.3s ease;
+    position: relative;
+    cursor: pointer;
+}
+
+.feedback-card:hover {
+    transform: scale(1.05);
+}
+
+.feedback-card strong {
+    display: block;
+    font-size: 18px;
+    color: cyan;
+    margin-bottom: 8px;
+}
+
+.feedback-card p {
+    font-size: 15px;
+    color: #eee;
+}
+
+.feedback-card small {
+    font-size: 13px;
+    color: #aaa;
+    display: block;
+    margin-top: 10px;
+}
+
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.feedback-container.paused {
+    animation-play-state: paused !important;
+}
+
+    </style>
+</head>
+<body>
+    <h1 class="animated-title">User  Feedback</h1>
+    <div class="feedback-section">
+        <div class="feedback-container" id="feedback-list">
+            <!-- Feedback cards will be added here by JS -->
+        </div>
+    </div>
+    
+    
+    <script>
+        function loadFeedback() {
+            fetch("/get_feedback")
+            .then(response => response.json())
+            .then(data => {
+                let feedbackList = document.getElementById("feedback-list");
+                feedbackList.innerHTML = "";
+        
+                data.forEach((feedback) => {
+                    let feedbackDiv = document.createElement("div");
+                    feedbackDiv.classList.add("feedback-card");
+                    feedbackDiv.innerHTML = `
+                        <strong>${feedback.user_name}</strong>
+                        <p>${feedback.feedback_text}</p>
+                        <small>${feedback.created_at}</small>
+                    `;
+                    feedbackList.appendChild(feedbackDiv);
+        
+                    feedbackDiv.addEventListener("mouseenter", () => {
+                        feedbackList.classList.add("paused");
+                    });
+        
+                    feedbackDiv.addEventListener("mouseleave", () => {
+                        feedbackList.classList.remove("paused");
+                    });
+                });
+            });
+        }
+        
+        window.onload = loadFeedback;
+        </script>
+         <a href="{{ url_for('user_dashboard') }}">
+            <button style="
+              padding: 10px 25px;
+              background: linear-gradient(90deg, #00bcd4, #000000);
+              color: white;
+              border: none;
+              border-radius: 5px;
+              font-size: 16px;
+              cursor: pointer;
+            ">⬅ Back </button>
+          </a>
+
+          <!-- Footer -->
+  <footer style="text-align: center; margin-top: 40px; padding: 15px 0; color: #777;">
+    © 2025 SG Gym. All rights reserved.
+  </footer>
+        
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Free Class</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    p {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .form-group {
+      flex: 1 1 48%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group-full {
+      flex: 1 1 100%;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 12px 30px;
+      margin: 30px auto 0;
+      display: block;
+      background-color: #ffc107;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .popup-content h2 {
+      color: green;
+    }
+
+    .popup button {
+      background: linear-gradient(90deg, cyan, black);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .popup button:hover {
+      background: linear-gradient(90deg, #000000, #00bcd4);
+    }
+
+    @media (max-width: 600px) {
+      .form-group {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Book Free Class</h1>
+    <p>Fields marked with an asterisk (*) are required.</p>
+    <form method="POST" action="{{ url_for('book_session') }}">
+      <div class="form-group">
+        <label>First Name:</label>
+        <input type="text" name="first_name" value="{{ user['name'] }}" readonly />
+      </div>
+
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="text" name="email" value="{{ user['email'] }}" readonly />
+      </div>
+
+      <div class="form-group">
+        <label>Phone:</label>
+        <input type="text" name="phone" value="{{ user['mobile'] }}" readonly />
+      </div>
+
+      <div class="form-group">
+        <label>Instructor:</label>
+        <input type="text" name="instructor" value="{{ session['instructor'] }}" readonly />
+      </div>
+
+      <div class="form-group">
+        <label>Session Name:</label>
+        <input type="text" name="session_name" value="{{ session['session_name'] }}" readonly />
+      </div>
+
+      <div class="form-group">
+        <label>Session Time:</label>
+        <input type="text" name="session_time" value="{{ session['session_time'] }}" readonly />
+      </div>
+
+      <div class="form-group">
+        <label>Session Date:</label>
+        <input type="text" name="session_date" value="{{ session['session_date'] }}" readonly />
+      </div>
+
+      <div class="form-group-full">
+        <label>Message (Optional):</label>
+        <input type="text" name="message" placeholder="Enter message" />
+      </div>
+
+      <button type="submit">Confirm Booking</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.querySelector("form");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+
+        fetch("{{ url_for('book_session') }}", {
+          method: "POST",
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showPopup(data);
+          } else {
+            alert("Booking failed. Please try again.");
+          }
+        })
+        .catch(error => console.error("Error:", error));
+      });
+    });
+
+    function showPopup(data) {
+      const popup = document.createElement("div");
+      popup.classList.add("popup");
+      popup.innerHTML = `
+        <div class="popup-content">
+          <h2>${data.message}</h2>
+          <p><strong>User Name:</strong> ${data.user_name}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Phone:</strong> ${data.phone}</p>
+          <p><strong>Session:</strong> ${data.session_name}</p>
+          <p><strong>Time:</strong> ${data.session_time}</p>
+          <p><strong>Date:</strong> ${data.session_date}</p>
+          <p><strong>Instructor:</strong> ${data.instructor}</p>
+          <button onclick="closePopup()">OK</button>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
+
+    function closePopup() {
+      document.querySelector(".popup").remove();
+      window.location.href = "{{ url_for('session_details') }}";
+    }
+  </script>
+  <!-- Add inside <body> at the very end, before </body> -->
+
+  <!-- Back Button -->
+  <div style="text-align: center; margin-top: 40px;">
+    <a href="{{ url_for('session_details') }}">
+      <button style="
+        padding: 10px 25px;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      ">⬅ Back to session</button>
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer style="text-align: center; margin-top: 40px; padding: 15px 0; color: #777;">
+    © 2025 SG Gym. All rights reserved.
+  </footer>
+
+</body>
+</html>

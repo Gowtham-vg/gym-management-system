@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Equipment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>/* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color:lightgray;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .outer-container {
+            background: linear-gradient(to bottom right, #094f6d, #81c784);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            color: #96d1ad;
+            margin-bottom: 20px;
+        }
+        
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        label {
+            font-size: large;
+            font-weight: bold;
+            color: #cbe5e8;
+            text-align: left;
+        }
+        
+        .input-field {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #38b8dc;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        
+        /* Button Styles */
+        .submit-btn {
+            background-color: #3cc1c5;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: #ce783f;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(56, 142, 60, 0.3);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .outer-container {
+                padding: 20px;
+            }
+        
+            h1 {
+                font-size: 1.5rem;
+            }
+        
+            .input-field, .submit-btn {
+                font-size: 0.9rem;
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <div class="outer-container">
+            <h1>Add New Equipment</h1>
+            <form action="{{ url_for('add_equipment') }}" method="POST" enctype="multipart/form-data">
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" required>
+            
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+            
+                <label for="specification">Specification:</label>
+                <textarea id="specification" name="specification" required></textarea>
+            
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" required>
+            
+                <label for="image">Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            
+                <button type="submit" class="submit-btn">Add Product</button>
+            </form>
+            
+        </div>
+    </body>
+    </html>
+    

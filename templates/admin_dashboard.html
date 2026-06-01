@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/css/admin_dash.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/equipment">Manage Equipment</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <section class="dashboard-section">
+            <h2>Members Management</h2>
+            <a href="/add_remove_members" class="btn">Add/Remove Members</a>
+            <a href="/view_users" class="btn">View Members</a>
+        </section>
+
+        <section class="dashboard-section">
+            <h2>Equipment Management</h2>
+            <a href="{{ url_for('add_equipment') }}" class="btn btn-primary">Add Equipment</a>
+
+             <a href="/equipment" class="btn">View Equipment</a>
+        </section>
+
+        <section class="dashboard-section">
+            <h2>Price Package Management</h2>
+            <a href="/add-package" class="btn">Add Package</a>
+            <a href="/view-packages" class="btn">View Packages</a>
+        </section>
+    </main>
+</body>
+</html>

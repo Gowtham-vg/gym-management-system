@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+</head>
+<body>
+    <h2>Pay ₹{{ price }} for {{ plan }}</h2>
+    <p>Scan QR Code or Use UPI: gym@upi</p>
+    <img src="/static/images/upi_qr.png" width="200">
+    
+    <form action="/process_payment" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="plan" value="{{ plan }}">
+        <input type="hidden" name="price" value="{{ price }}">
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+        <label>Upload Payment Screenshot:</label>
+        <input type="file" name="screenshot" accept="image/png, image/jpeg"><br>
+        <button type="submit">I Have Paid</button>
+    </form>
+    
+</body>
+</html>

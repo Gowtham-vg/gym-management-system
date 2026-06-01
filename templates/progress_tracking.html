@@ -1,0 +1,430 @@
+ 
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Workout Progress</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script> <!-- GSAP for Animations -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            /* Default Dark Mode */
+            body {
+                font-family: Arial, sans-serif;
+                background: #121212;
+                color: white;
+                text-align: center;
+                transition: background 0.3s ease, color 0.3s ease;
+            }
+    
+            /* Light Mode */
+            body.light-mode {
+                background: #f5f5f5;
+                color: black;
+            }
+    
+            .container {
+                width: 90%;
+                max-width: 1000px;
+                margin: auto;
+                padding: 20px;
+            }
+    
+            .toggle-btn {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                padding: 10px 20px;
+                background: cyan;
+                color: black;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                font-weight: bold;
+            }
+    
+            .chart-container {
+                width: 100%;
+                max-width: 600px;
+                margin: auto;
+                height: 300px; /* Make sure that the chart container has a defined height */
+            }
+    
+            .progress-bar {
+                width: 100%;
+                background: #333;
+                border-radius: 10px;
+                overflow: hidden;
+                margin: 20px 0;
+            }
+    
+            .progress {
+                height: 20px;
+                width: 0%;
+                background: cyan;
+                transition: width 1s ease-in-out;
+            }
+    
+            /* Light Mode Styles */
+            body.light-mode .progress-bar {
+                background: #ddd;
+            }
+    
+            body.light-mode .progress {
+                background: blue;
+            }
+    
+            /* Circular Progress Bars */
+            .circle-progress {
+                position: relative;
+                display: inline-block;
+                width: 120px;
+                height: 120px;
+                background: conic-gradient(cyan 0% 0%, #222 0%);
+                border-radius: 50%;
+                margin: 20px;
+            }
+            .circle-progress::after {
+                content: attr(data-label);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                font-weight: bold;
+            }
+    
+            /* Achievements Section */
+            .achievements {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            .achievement-badge {
+                background: gold;
+                color: black;
+                padding: 10px;
+                border-radius: 10px;
+                font-weight: bold;
+            }
+            canvas {
+            display: block; /* Or flex */
+            width: 100%;
+            height: auto;
+             }
+            body.light-mode canvas {
+             }
+             .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        #startButton {
+            background-color: #00b894;
+            color: white;
+        }
+
+        #startButton:hover {
+            background-color: #019874;
+        }
+
+        #submitBtn {
+            background-color: #0984e3;
+            color: white;
+        }
+
+        #submitBtn:hover {
+            background-color: #056abf;
+        }
+    
+            /* Scroll Animations */
+            body.fade-in {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.8s ease-in-out;
+            }
+            .nav-buttons { margin-top: 20px; }
+            .nav-buttons a { padding: 10px 20px; background: linear-gradient(90deg, #00bcd4, #000000); color: white; text-decoration: none; border-radius: 5px; }
+            .nav-buttons a:hover { background: linear-gradient(90deg, #000000, #00bcd4); }
+        </style>
+    </head>
+    <body>
+        <button class="toggle-btn" onclick="toggleTheme()">🌞 / 🌚</button>
+        
+        <div class="container">
+            <h1>📊 Your Workout Progress</h1>
+            <!-- Circular Progress for Calories, Strength, & Streak -->
+            <div class="fade-in">
+                <div class="circle-progress" id="calories-circle" data-label="🔥 120 kcal"></div>
+                <div class="circle-progress" id="strength-circle" data-label="💪 1.5 kg"></div>
+                <div class="circle-progress" id="streak-circle" data-label="🔥 2 Days"></div>
+            </div>
+    
+            <!-- Workout Chart -->
+            <div class="chart-container fade-in">
+                <canvas id="workoutChart">
+
+                </canvas>
+            </div>
+    
+            <!-- Goal Progress -->
+            <h3>🎯 Goal Progress</h3>
+            <div class="progress-bar fade-in">
+                <div class="progress" id="goal-progress"></div>
+            </div>
+    
+            <!-- Achievements -->
+            <h3>🏆 Achievements</h3>
+            <div class="achievements fade-in" id="achievements"></div>
+        </div>
+    
+        <select id="workout-dropdown">
+            <option value="">-- Select Workout Plan --</option>
+        </select>
+        <button id="start-workout" style="display: none;">Start</button>
+        
+        <div id="user-info"></div>
+        <div id="workout-info"></div>
+        
+        <!-- ✅ Save Progress Button (Initially Hidden) -->
+        <button id="save-progress" style="display: none;">Save Progress</button> 
+    
+        <div class="nav-buttons">
+            <a href="{{ url_for('download_progress_report') }}" class="btn btn-primary">Download Progress Report</a>
+        </div>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let submittedExercises = new Set(); // ✅ Track submitted exercises
+            
+                fetch("/get_workout_plans")
+                    .then(response => response.json())
+                    .then(data => {
+                        let dropdown = document.getElementById("workout-dropdown");
+                        data.forEach(workout => {
+                            let option = document.createElement("option");
+                            option.value = workout.id;
+                            option.textContent = workout.name;
+                            dropdown.appendChild(option);
+                        });
+                    });
+            
+                document.getElementById("start-workout").addEventListener("click", function () {
+                    let selectedWorkout = document.getElementById("workout-dropdown").value;
+            
+                    if (!selectedWorkout) {
+                        alert("Please select a workout plan!");
+                        return;
+                    }
+            
+                    fetch(`/start_workout/${selectedWorkout}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert(data.error);
+                                return;
+                            }
+            
+                            let userInfo = `
+                                <h3>User Details</h3>
+                                <p><strong>Name:</strong> ${data.user.name}</p>
+                                <p><strong>Age:</strong> ${data.user.age}</p>
+                                <p><strong>Membership:</strong> ${data.user.membership_plan}</p>
+                                <p><strong>Mobile:</strong> ${data.user.mobile}</p>
+                            `;
+            
+                            let workoutInfo = `
+                                <h3>Workout: ${data.workout.name}</h3>
+                                <p>${data.workout.description}</p>
+                                <h4>Exercises</h4>
+                                <ul id="exercise-list"></ul>
+                            `;
+            
+                            document.getElementById("user-info").innerHTML = userInfo;
+                            document.getElementById("workout-info").innerHTML = workoutInfo;
+            
+                            let exerciseList = document.getElementById("exercise-list");
+                            exerciseList.innerHTML = "";
+                            let exercises = data.workout.exercises.split(",");
+            
+                            exercises.forEach(exercise => {
+                                let li = document.createElement("li");
+                                let exerciseName = exercise.trim();
+            
+                                li.innerHTML = `
+                                    <strong>${exerciseName}</strong><br>
+                                    Sets: <input type="number" min="1" value="1" id="sets-${exerciseName}">
+                                    Reps: <input type="number" min="1" value="1" id="reps-${exerciseName}">
+                                    <button class="submit-btn" data-exercise="${exerciseName}" data-workout="${selectedWorkout}">Submit</button>
+                                `;
+            
+                                exerciseList.appendChild(li);
+                            });
+            
+                            document.getElementById("save-progress").style.display = "none";
+                        });
+                });
+            
+                document.addEventListener("click", function (event) {
+                    if (event.target.classList.contains("submit-btn")) {
+                        let exercise = event.target.getAttribute("data-exercise");
+                        let workoutId = event.target.getAttribute("data-workout");
+            
+                        let sets = document.getElementById(`sets-${exercise}`).value;
+                        let reps = document.getElementById(`reps-${exercise}`).value;
+            
+                        fetch("/submit_exercise", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                workout_id: workoutId,
+                                exercise: exercise,
+                                sets: sets,
+                                reps: reps
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.message);
+                                submittedExercises.add(exercise);
+            
+                                let totalExercises = document.querySelectorAll("#exercise-list li").length;
+                                if (submittedExercises.size === totalExercises) {
+                                    document.getElementById("save-progress").style.display = "block";
+                                }
+                            } else {
+                                alert("Error: " + data.error);
+                            }
+                        });
+                    }
+                });
+            
+                document.getElementById("save-progress").addEventListener("click", function () {
+                    alert("Workout progress saved successfully!");
+                    location.reload();
+                });
+            
+                document.getElementById("workout-dropdown").addEventListener("change", function () {
+                    let startButton = document.getElementById("start-workout");
+                    startButton.style.display = this.value ? "block" : "none";
+                });
+            
+                document.querySelector(".toggle-btn").addEventListener("click", function () {
+                    document.body.classList.toggle("light-mode");
+                    localStorage.setItem("theme", document.body.classList.contains("light-mode") ? "light" : "dark");
+                });
+            
+                if (localStorage.getItem("theme") === "light") {
+                    document.body.classList.add("light-mode");
+                }
+            });
+    
+            function loadWorkoutChart() {
+                fetch("/get_workout_progress")
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("🔥 Workout Progress Data:", data); // Debugging Step
+    
+                        const labels = data.workout_data.map(item => item.workout_date);
+                        const caloriesData = data.workout_data.map(item => parseInt(item.total_calories));
+                        const durationData = data.workout_data.map(item => parseInt(item.total_duration));
+    
+                        const ctx = document.getElementById('workoutChart').getContext('2d');
+                        const gradientCalories = ctx.createLinearGradient(0, 0, 0, 400);
+                        gradientCalories.addColorStop(0, 'rgba(75, 192, 192, 0.2)');
+                        gradientCalories.addColorStop(1, 'rgba(75, 192, 192, 0)');
+    
+                        const gradientDuration = ctx.createLinearGradient(0, 0, 0, 400);
+                        gradientDuration.addColorStop(0, 'rgba(255, 99, 132, 0.2)');
+                        gradientDuration.addColorStop(1, 'rgba(255, 99, 132, 0)');
+    
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'Calories Burned',
+                                        data: caloriesData,
+                                        backgroundColor: gradientCalories,
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 2,
+                                        fill: true,
+                                        tension:0.4 // makes line smoother
+                                    },
+                                    {
+                                        label: 'Total Duration (mins)',
+                                        data: durationData,
+                                        backgroundColor: gradientDuration,
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        borderWidth: 2,
+                                        fill: true,
+                                        tension:0.4 // makes line smoother
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: {
+                                            display: true,
+                                            text: 'Calories / Duration (mins)'
+                                        }
+                                    },
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Date'
+                                        }
+                                    }
+                                },
+                                animation: {
+                                    duration: 2000,
+                                },
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Workout Progress Over Time'
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            }
+            document.addEventListener("DOMContentLoaded", function () {
+                if (typeof Chart === "undefined") {
+                    let script = document.createElement("script");
+                    script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+                    script.onload = function () {
+                        console.log("✅ Chart.js loaded successfully");
+                        loadWorkoutChart(); // Load the chart only after Chart.js loads
+                    };
+                    document.head.appendChild(script);
+                } else {
+                    loadWorkoutChart(); // Chart.js is already loaded, go ahead and load the chart
+                }
+            });
+            
+        </script>
+    </body>
+    </html>
+    

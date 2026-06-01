@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+        }
+
+        body#login-body {
+            background: linear-gradient(to bottom right,black,black,white,cyan);
+        }
+
+         
+
+        .container {
+            background: linear-gradient(to bottom right, cyan,black,black,white);
+             border-radius: 10px;
+            box-shadow: 0 4px 8px  rgba(0, 0, 0, 0.2);
+            padding: 20px 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        .container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container input[type="text"],
+        .container input[type="password"],
+        .container input[type="email"],
+        .container input[type="tel"] {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .container button {
+            padding: 12px 20px;
+            margin-top: 20px;
+            background: linear-gradient(90deg, #00bcd4, #000000); /* Cyan to Black gradient */
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+    
+        .container button:hover {
+            background: linear-gradient(90deg, #000000, #00bcd4); /* Grey to White gradient on hover */
+            transform: scale(1.05); /* Slightly enlarge button */
+        }
+
+        .container a {
+            color: black; /* Cyan for links */
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 10px;
+            display: inline-block;
+        }
+    
+        .container a:hover {
+            color: #3ec1d8; /* Green highlight on hover */
+            text-decoration: underline;
+        }
+
+        .toggle {
+            margin-top: 10px;
+            font-size:14px;
+            
+        }
+        #link1{
+            color:white;
+        }
+
+        label{
+            font-weight: bold;
+            font-size:15px;
+        }
+    </style>
+</head>
+<body id="login-body">
+    <!--HEADER SECTION-->
+    <header>
+        
+        <a href ="/" class="logo">SG GYM <span>Fitness</span></a>
+
+        <div class="bx-menu" id="menu-icon">
+             
+                <i class="fa-solid fa-bars-staggered"></i>   
+            
+        </div>
+        
+
+        <ul class="navbar">
+             
+                <li id="i1">
+                    <i class="fa-solid fa-cart-shopping" onclick="redirectToEquipment()"></i>
+                </li>
+
+            <li> <a href="/#home">HOME</a></li>
+            <li> <a href="/#services">SERVICE</a></li>
+            <li> <a href="/#about">ABOUT</a></li>
+            <li> <a href="/#plans">PRICING</a></li>
+            <li> <a href="/#review">REVIEW</a></li>
+        </ul>     
+         
+                
+        
+     
+    </header>
+    <div class="container" id="login-container">
+        <h1>Login to Your Gym Account</h1>
+        <form action="/login" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+        <p class="toggle"><a href="/forgot-password" id="link1">Forgot Password?</a></p><br>
+        
+        <p class="toggle">Don't have an account? <a href="/register">Register here</a></p>
+    </div>
+ 
+ </body>
+</html>

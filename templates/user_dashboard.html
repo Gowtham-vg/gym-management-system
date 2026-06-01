@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to bottom right, cyan, black, rgb(255, 255, 255));
+        color: #333;
+        position: relative;
+        min-height: 100vh;
+    }
+
+    header {
+        background: linear-gradient(to bottom right, cyan, black, rgb(255, 255, 255));
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 2.5em;
+    }
+
+    .welcome-message {
+        background-color: #ffffff;
+        color: #333;
+        padding: 10px;
+        margin: 2px;
+        width: 100%;
+        border: 1px solid #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .welcome {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .welcome h2 {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .user-info, .actions, .announcements {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #fff;
+        color: #333;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 20px;
+        border-top: 2px solid #bbb;
+    }
+
+    .actions {
+        text-align: center;
+    }
+    .actions a {
+        display: inline-block;
+        width: 200px;
+        padding: 15px;
+        margin: 10px; /* Added extra spacing between buttons */
+        background-color: #00bcd4;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        text-align: center;
+        font-size: 1em;
+        font-weight: bold;
+    }
+    .actions a:hover {
+        background-color: #00acc1;
+        transform: scale(1.1);
+    }   
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(6, 143, 134, 0.6); /* Blurred background with transparency */
+        padding: 30px;
+        width: 40%;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        backdrop-filter: blur(12px); /* Smooth blur effect */
+    }
+    .popup-content {
+        text-align: center;
+        background: rgba(30, 30, 47, 0.9); /* Match user dashboard theme with transparency */
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+    }
+    .popup textarea {
+        width: 100%;
+        height: 120px;
+        margin-top: 10px;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        background: rgba(0, 255, 255, 0.2); /* Slight transparency */
+        backdrop-filter: blur(8px);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .submit-btn {
+        background: #00bcd4;
+        border: none;
+        padding: 10px 20px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+    }
+    .submit-btn:hover {
+        background: #000000;
+    }
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 24px;
+        color: rgb(0, 0, 0);
+    }
+
+
+    .home-button {
+        text-align: center;
+        margin-top: 30px; /* Moves the button above the footer */
+    }
+
+    .home-button a {
+        display: inline-block;
+        padding: 15px 25px;
+        background: linear-gradient(90deg, #00bcd4, #000000);
+        color: #fff;
+        font-size: 1.2em;
+        text-decoration: none;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .home-button a:hover {
+        background: linear-gradient(90deg, #000000, #00bcd4);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    footer {
+        text-align: center;
+        padding: 10px;
+        background: #333;
+        color: #fff;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 1em;
+        margin-top: 10px;
+    }
+    /* BMI-CALCULATOR */
+    /* BMI   */
+b{
+    font-size: large;
+}
+        /* Button Styling */
+        #bmi-btn {
+            margin-left: 77%;
+            font-size: 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            opacity: 1.7;
+            backdrop-filter: blur(10px);
+        }
+        #bmi-btn:hover {
+            background: linear-gradient(to bottom right,rgb(0, 0, 0), cyan);
+            transform: scale(1.10);
+            transition: transform 0.3s ease-in-out;
+         }
+
+        /* Popup Styling */
+        .bmi-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%) scale(0.9);
+            width: 350px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: 0.3s ease-in-out;
+            visibility: hidden;
+        }
+        .bmi-popup.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            visibility: visible;
+        }
+        .bmi-result {
+        margin-top: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    .underweight { background-color: lightblue; color: black; }
+    .normal { background-color: lightgreen; color: black; }
+    .overweight { background-color: orange; color: white; }
+    .obese { background-color: red; color: white; }
+
+    /* Ensure Popup is Initially Hidden */
+    .bmi-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        width: 350px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transition: 0.3s ease-in-out;
+        visibility: hidden;
+    }
+    .bmi-popup.active {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        visibility: visible;
+    }
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        /* BMI Calculator Button Styling */
+/* Gender Dropdown Styling */
+.bmi-popup select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Smaller Calculate Button */
+.bmi-popup button {
+    background: linear-gradient(90deg, #00bcd4, #000000);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;  /* Reduced from 18px */
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;  /* Slightly smaller */
+    width: 80%;  /* Reduced width */
+    transition: background 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.bmi-popup button:hover {
+    background: linear-gradient(90deg, #000000, #00bcd4);
+    transform: scale(1.05);
+}
+
+
+        /* Input Styling */
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        /* Result Box */
+        .bmi-result {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Dashboard</h1>
+        <i id="bmi-btn" class="fas fa-calculator"></i> <b>BMI Calculator</b>
+
+    </header>
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome">
+            <h2>Welcome, {{ user_name }}!</h2>
+            <p>Your journey to fitness starts here. Stay consistent and achieve your goals!</p>
+        </div>
+
+        <!-- Welcome Message -->
+        <div class="welcome-message">
+            Welcome back, <strong>{{ user_name }}</strong>! We're glad to have you here.
+        </div>
+
+        <!-- User Information -->
+        <div class="user-info">
+            <h3>Your Information</h3>
+            <p><strong>Membership Plan:</strong> {{ membership_plan }}</p>
+            <p><strong>Renewal Date:</strong> {{ renewal_date }}</p>
+            <p><strong>Contact:</strong> {{ user_contact }}</p>
+        </div>
+
+        <!-- Updated User Dashboard with Feedback Button -->
+<div class="actions">
+    <h3>Quick Actions</h3>
+    <a href="{{ url_for('store_payment') }}">View Equipment</a>
+    <a href="{{ url_for('session_details') }}" class="btn btn-primary">Book a Session</a>
+    <a href="{{ url_for('workout_plans') }}" class="btn btn-primary">View Workout Plans</a>
+    <a href="{{ url_for('progress_tracking') }}">Check Progress</a>
+    <a href="#" id="feedback-btn" class="btn btn-primary">Feedback</a> <!-- New Feedback Button -->
+    <a href="/feedback" class="btn btn-primary">View Feedback</a>
+
+</div>
+
+<!-- Feedback Popup Window -->
+<div id="feedback-popup" class="popup">
+    <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <h2>Give Your Feedback</h2>
+        <textarea id="feedback-text" placeholder="Type your feedback here..."></textarea>
+        <button class="submit-btn" onclick="submitFeedback()">Submit</button>
+    </div>
+</div>
+
+        <!-- Announcements -->
+        <div class="announcements">
+            <h3>Announcements</h3>
+            <p>💪 New equipment arriving next week!</p>
+            <p>🔥 Join our Yoga sessions every Saturday at 10 AM.</p>
+        </div>
+
+
+    <br><br>
+
+    <!-- Home Button -->
+    <div class="home-button">
+        <a href="/">Home</a>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+
+
+    <footer>
+        <p>&copy; SG Gym. All rights reserved.</p>
+    </footer>
+
+    <!-- BMI Calculator Popup -->
+<div class="bmi-popup" id="bmi-popup">
+    <span class="close-btn" onclick="closeBMIPopup()">&times;</span>
+    <h2>BMI Calculator</h2>
+    
+    <!-- Gender Selection -->
+    <select id="gender">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+
+    <input type="number" id="age" placeholder="Enter your Age" required>
+    <input type="number" id="height" placeholder="Enter Height (cm)" required>
+    <input type="number" id="weight" placeholder="Enter Weight (kg)" required>
+    
+    <button onclick="calculateBMI()">Calculate</button>
+    
+    <div class="bmi-result" id="bmi-result"></div>
+</div>
+
+    
+
+<!-- JavaScript to Handle Popup & Submission -->
+<script>
+    document.getElementById("feedback-btn").addEventListener("click", function() {
+        document.getElementById("feedback-popup").style.display = "block";
+    });
+    function closePopup() {
+        document.getElementById("feedback-popup").style.display = "none";
+    }
+    function submitFeedback() {
+    let feedback = document.getElementById("feedback-text").value;
+    let userName = "{{ user_name }}"; // Ensure this variable exists
+
+    console.log("Submitting feedback:", feedback, userName); // Debugging log
+
+    if (feedback.trim() === "") {
+        alert("Please enter your feedback!");
+        return;
+    }
+
+    fetch("/submit_feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ feedback: feedback, user_name: userName }) // Send user_name
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        closePopup();
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+
+</script>
+<script>
+    // Open BMI Popup
+    document.getElementById("bmi-btn").addEventListener("click", function() {
+        document.getElementById("bmi-popup").classList.add("active");
+    });
+
+    // Close BMI Popup
+    function closeBMIPopup() {
+        document.getElementById("bmi-popup").classList.remove("active");
+    }
+
+    // BMI Calculation
+    function calculateBMI() {
+        let height = document.getElementById("height").value / 100; // Convert cm to meters
+        let weight = document.getElementById("weight").value;
+        
+        if (height <= 0 || weight <= 0) {
+            alert("Please enter valid height and weight!");
+            return;
+        }
+
+        let bmi = (weight / (height * height)).toFixed(1);
+
+        let resultDiv = document.getElementById("bmi-result");
+        let category = "";
+        let className = "";
+
+        if (bmi < 18.5) {
+            category = "Underweight";
+            className = "underweight";
+        } else if (bmi >= 18.5 && bmi < 24.9) {
+            category = "Normal Weight";
+            className = "normal";
+        } else if (bmi >= 25 && bmi < 29.9) {
+            category = "Overweight";
+            className = "overweight";
+        } else {
+            category = "Obese";
+            className = "obese";
+        }
+
+        // Apply color coding and display result
+        resultDiv.innerHTML = `Your BMI: ${bmi} (${category})`;
+        resultDiv.className = `bmi-result ${className}`;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Timetable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #ff7300;
+            color: white;
+        }
+        .session {
+            background-color: burlywood;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .session:hover {
+            background-color: #ddd;
+        }
+        .session.selected {
+            background-color: #ffcc00;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .day-header {
+            background: linear-gradient(to bottom right, cyan, black, grey, white);
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px;
+            color: #fff;
+        }
+        #book-session-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 16px;
+            background: linear-gradient(90deg, #00bcd4, #000000);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        #book-session-btn:hover {
+            background: linear-gradient(90deg, #000000, #00bcd4);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+        .nav-buttons {
+            margin-top: 20px;
+        }
+        .nav-buttons a {
+            display: inline-block;
+            padding: 12px 20px;
+            background: linear-gradient(90deg, #00bcd4, #000000);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .nav-buttons a:hover {
+            background: linear-gradient(90deg, #000000, #00bcd4);
+        }
+        /* session card */
+        .sessions { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .session-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        .cancel-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .active { color: green; font-weight: bold; }
+        .cancelled { color: red; font-weight: bold; }
+        .sessions { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .session-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        text-align: center;
+    }
+    .cancel-btn {
+        background: red;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .active { color: green; font-weight: bold; }
+    .cancelled { color: red; font-weight: bold; }
+    #my-bookings-btn {
+        margin-top: 20px;
+        padding: 12px 20px;
+        font-size: 16px;
+        background: linear-gradient(90deg, #00bcd4, #000000);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    #my-bookings-btn:hover {
+        background: linear-gradient(90deg, #000000, #00bcd4);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    }
+    #bookings-container {
+         display: flex;
+         margin: 10px;
+     }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Gym Session Timetable</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Session</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Instructor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set displayed_sessions = [] %}
+                {% set day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+                {% for day in day_order %}
+                    {% for session in sessions %}
+                        {% if session['session_day'] == day and session['session_name'] ~ session['session_time'] ~ session['session_date'] not in displayed_sessions %}
+                            <tr class="session" onclick="toggleSession(this, '{{ session['session_name'] }}', '{{ session['session_time'] }}', '{{ session['session_date'] }}', '{{ session['instructor'] }}')">
+                                <td>{{ session['session_day'] }}</td>
+                                <td>{{ session['session_name'] }}</td>
+                                <td>{{ session['session_time'] }}</td>
+                                <td>{{ session['session_date'] }}</td>
+                                <td>{{ session['instructor'] }}</td>
+                            </tr>
+                            {% set _ = displayed_sessions.append(session['session_name'] ~ session['session_time'] ~ session['session_date']) %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <button id="book-session-btn" onclick="bookSession()">Book This Session</button>
+    </div>
+    <div class="nav-buttons">
+        <a href="{{ url_for('user_dashboard') }}">Back</a>
+    </div>
+
+        <!-- My Bookings Button -->
+        <button id="my-bookings-btn" onclick="toggleMyBookings()">My Bookings</button>
+
+        <!-- My Bookings Section (Initially Hidden) -->
+        <div id="my-bookings" class="container" style="display: none;">
+            <h2>Your Booked Sessions</h2>
+            <div id="bookings-container"></div>
+        </div>
+    <footer>
+        <p style="margin-top: 100px;">&copy; SG Gym. All rights reserved.</p>
+    </footer>
+    <script>
+        let selectedSession = "";
+        let selectedRow = null;
+
+        function toggleSession(row, name, time, date, instructor) {
+            if (selectedRow === row) {
+                row.classList.remove("selected");
+                selectedRow = null;
+                selectedSession = "";
+                document.getElementById("book-session-btn").style.display = "none";
+            } else {
+                if (selectedRow) {
+                    selectedRow.classList.remove("selected");
+                }
+                row.classList.add("selected");
+                selectedRow = row;
+                selectedSession = JSON.stringify({
+                    session_name: name,
+                    session_time: time,
+                    session_date: date,
+                    instructor: instructor
+                });
+                document.getElementById("book-session-btn").style.display = "block";
+            }
+        }
+
+        function bookSession() {
+    if (!selectedSession) {
+        alert("Please select a session before booking.");
+        return;
+    }
+    window.location.href = "{{ url_for('book_session') }}?session=" + encodeURIComponent(selectedSession);
+}
+
+function toggleMyBookings() {
+        let bookingsContainer = document.getElementById("my-bookings");
+        if (bookingsContainer.style.display === "none") {
+            bookingsContainer.style.display = "block";
+            loadMyBookings();
+        } else {
+            bookingsContainer.style.display = "none";
+        }
+    }
+
+    function loadMyBookings() {
+    fetch("{{ url_for('get_user_sessions') }}")
+        .then(response => response.json())
+        .then(data => {
+            let container = document.getElementById("bookings-container");
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                container.innerHTML = "<p>No sessions booked yet.</p>";
+                return;
+            }
+
+            data.forEach(session => {
+                let sessionCard = document.createElement("div");
+                sessionCard.classList.add("session-card");
+
+                sessionCard.innerHTML = `
+                    <h3>${session.session_name}</h3>
+                    <p><strong>Time:</strong> ${session.session_time}</p>
+                    <p><strong>Date:</strong> ${session.session_date}</p>
+                    <p><strong>Instructor:</strong> ${session.instructor}</p>
+                    <p><strong>Status:</strong> <span class="${session.status === 'Active' ? 'active' : 'cancelled'}">${session.status}</span></p>
+                    <form action="/cancel_session/${session.id}" method="post">
+                        <button type="submit" class="cancel-btn">Cancel Session</button>
+                    </form>
+                `;
+                container.appendChild(sessionCard);
+            });
+        })
+        .catch(error => console.error("Error fetching user sessions:", error));
+}
+
+
+
+    </script>
+</body>
+</html>
