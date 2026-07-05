@@ -137,4 +137,4 @@ __pycache__/
 
 **Gowtham B**  
 MCA Graduate | Full Stack Developer  
-[LinkedIn](https://linkedin.com/in/gow2002) · [GitHub](https://github.com/Gowtham-vg)
+[LinkedIn](https://.linkedin.com/in/gowtham-b-developer) · [GitHub](https://github.com/Gowtham-vg)
