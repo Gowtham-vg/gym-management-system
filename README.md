@@ -1,140 +1,280 @@
-# Gym Management System
+<div align="center">
 
-A full-stack web application for managing gym operations, built with Python (Flask) and MySQL.
+# 🏋️ Gym Management System
 
-## Features
+### Modern Full-Stack Gym Management & Equipment Sales Web Application
 
-**Member Side**
-- Register and log in with secure password hashing (bcrypt)
-- Forgot password flow with OTP sent via email
-- View and upgrade membership plans
-- Browse and book workout sessions
-- Track workout progress (sets, reps, calories burned)
-- View diet plans and equipment
+*A complete Gym Management solution built with **Python (Flask)**, **MySQL**, and modern web technologies.*
 
-**Admin Side**
-- Separate admin login with security key protection
-- Add, edit, and remove gym members
-- Manage gym equipment (with image upload)
-- View all registered users
+<p>
 
-## Tech Stack
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Web_App-000000?style=for-the-badge&logo=flask)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-- **Backend:** Python, Flask, MySQL
-- **Frontend:** HTML, CSS, JavaScript
-- **Auth:** Flask-Bcrypt (password hashing), Session-based login
-- **Email:** SMTP (Gmail) for OTP delivery
-- **PDF Generation:** ReportLab
-- **File Uploads:** Werkzeug
-- **Version Control:** Git
+</p>
 
-## Project Structure
+<p>
 
+![GitHub Repo stars](https://img.shields.io/github/stars/Gowtham-vg/gym-management-system?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/Gowtham-vg/gym-management-system?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/Gowtham-vg/gym-management-system?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/Gowtham-vg/gym-management-system?style=flat-square)
+
+</p>
+
+---
+
+## 📖 Overview
+
+The **Gym Management System** is a full-stack web application designed to simplify gym administration and enhance the experience for both members and administrators.
+
+It provides secure authentication, workout tracking, membership management, equipment sales, admin dashboards, and automated password recovery using OTP verification.
+
+---
+
+# ✨ Features
+
+## 👤 Member Module
+
+- 🔐 Secure Registration & Login
+- 🔑 Forgot Password using Email OTP
+- 🔒 Bcrypt Password Hashing
+- 💳 Membership Management
+- 📅 Workout Session Booking
+- 📊 Progress Tracking
+- 🔥 Calories Burned Tracking
+- 💪 Workout Plans
+- 🥗 Diet Plans
+- 🛒 Equipment Store
+
+---
+
+## 👨‍💼 Admin Module
+
+- 🔐 Separate Admin Login
+- 🛡 Security Key Protection
+- 👥 Manage Members
+- ➕ Add Equipment
+- ✏ Edit Equipment
+- ❌ Delete Equipment
+- 🖼 Image Upload Support
+- 📋 View Registered Users
+- 📈 Dashboard Management
+
+---
+
+# 🚀 Technology Stack
+
+| Category | Technologies |
+|-----------|--------------|
+| **Backend** | Python, Flask |
+| **Frontend** | HTML5, CSS3, JavaScript |
+| **Database** | MySQL |
+| **Authentication** | Flask-Bcrypt |
+| **Email Service** | Gmail SMTP |
+| **Reports** | ReportLab PDF |
+| **File Uploads** | Werkzeug |
+| **Version Control** | Git & GitHub |
+
+---
+
+# 🏗 System Architecture
+
+```text
+               User
+                │
+                ▼
+      HTML • CSS • JavaScript
+                │
+                ▼
+          Flask Application
+                │
+      ┌─────────┴─────────┐
+      ▼                   ▼
+ MySQL Database      SMTP Email
+      │                   │
+      ▼                   ▼
+Workout Data        OTP Verification
+Members
+Equipment
+Sessions
 ```
-gym-management-system/
-├── app.py                  # Main Flask application
-├── requirements.txt        # Python dependencies
-├── .env                    # Environment variables (not committed)
+
+---
+
+# 📂 Project Structure
+
+```text
+gym-management-system
+│
+├── app.py
+├── requirements.txt
+├── README.md
+├── .env.example
 ├── .gitignore
-├── static/
-│   ├── css/
-│   ├── js/
-│   ├── images/
-│   └── uploads/            # Uploaded equipment images
-└── templates/
+│
+├── static
+│   ├── css
+│   ├── js
+│   ├── images
+│   └── uploads
+│
+└── templates
     ├── index.html
     ├── login.html
     ├── register.html
+    ├── forgot_password.html
+    ├── reset_password.html
     ├── user_dashboard.html
     ├── admin_dashboard.html
+    ├── equipment.html
     ├── workout_plans.html
     ├── workout_details.html
-    ├── equipment.html
     └── ...
 ```
 
-## Getting Started
+---
 
-### Prerequisites
+# ⚙ Installation
 
-- Python 3.8+
-- MySQL
-- pip
+## 1️⃣ Clone Repository
 
-### Installation
-
-**1. Clone the repository**
 ```bash
 git clone https://github.com/Gowtham-vg/gym-management-system.git
+
 cd gym-management-system
 ```
 
-**2. Install dependencies**
+---
+
+## 2️⃣ Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-**3. Set up the database**
+---
 
-Create a MySQL database named `gym_management` and import the schema:
-```bash
-mysql -u root -p gym_management < schema.sql
+## 3️⃣ Configure MySQL
+
+Create a database named
+
+```text
+gym_management
 ```
 
-**4. Configure environment variables**
+Import your SQL schema.
 
-Create a `.env` file in the root folder:
-```
-SECRET_KEY=your_secret_key_here
+---
+
+## 4️⃣ Create .env
+
+```env
+SECRET_KEY=your_secret_key
+
 DB_HOST=localhost
+
 DB_USER=root
+
 DB_PASSWORD=your_mysql_password
+
 DB_NAME=gym_management
+
 MAIL_EMAIL=your_email@gmail.com
+
 MAIL_PASSWORD=your_gmail_app_password
 ```
 
-> To get a Gmail App Password: Google Account → Security → 2-Step Verification → App Passwords
+---
 
-**5. Run the app**
+## 5️⃣ Run the Application
+
 ```bash
 python app.py
 ```
 
-Open your browser and go to: `http://127.0.0.1:5000`
+Open
 
-## Requirements
-
-Create a `requirements.txt` file with:
 ```
-flask
-flask-bcrypt
-flask-mail
+http://127.0.0.1:5000
+```
+
+---
+
+# 🔒 Security Features
+
+- ✅ Password Hashing using Flask-Bcrypt
+- ✅ Environment Variables for Credentials
+- ✅ OTP-based Password Reset
+- ✅ Secure Session Authentication
+- ✅ Separate Admin Authentication
+- ✅ Sensitive Credentials excluded using `.gitignore`
+
+---
+
+# 📦 Requirements
+
+```
+Flask
+
+Flask-Bcrypt
+
+Flask-Mail
+
 mysql-connector-python
-reportlab
-werkzeug
+
 python-dotenv
+
+Werkzeug
+
+ReportLab
 ```
 
-Generate it automatically with:
+or
+
 ```bash
-pip freeze > requirements.txt
+pip install -r requirements.txt
 ```
 
-## Security Note
+---
 
-This project uses environment variables to store sensitive credentials. Never commit your `.env` file or hardcode passwords in source code.
+# 🚀 Future Enhancements
 
-Add this to your `.gitignore`:
-```
-.env
-static/uploads/
-__pycache__/
-*.pyc
-```
+- 🤖 AI Workout Recommendation
+- 📱 Mobile Responsive Dashboard
+- 💳 Online Payment Integration
+- 📷 QR Attendance System
+- ☁ Cloud Deployment
+- 📈 Analytics Dashboard
+- 📩 Email Notifications
+- 📅 Trainer Scheduling
 
-## Author
+---
 
-**Gowtham B**  
-MCA Graduate | Full Stack Developer  
-[LinkedIn](https://.linkedin.com/in/gowtham-b-developer) · [GitHub](https://github.com/Gowtham-vg)
+# 👨‍💻 Author
+
+## Gowtham B
+
+**MCA Graduate | Full Stack Developer**
+
+🔗 GitHub
+
+https://github.com/Gowtham-vg
+
+🔗 LinkedIn
+
+https://www.linkedin.com/in/gowtham-b-developer/
+
+---
+
+<div align="center">
+
+### ⭐ If you found this project useful, consider giving it a Star!
+
+**Made with ❤️ by Gowtham B**
+
+</div>
