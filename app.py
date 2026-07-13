@@ -1,6 +1,4 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 import mysql.connector
 
@@ -34,7 +32,7 @@ import mysql.connector
 
  
 app = Flask(__name__, static_folder="static", template_folder="templates")
-app.secret_key = os.getenv('SECRET_KEY', 'dev_fallback_key')
+app.secret_key = 'your_secret_key'
 bcrypt = Bcrypt(app)
 app.config['UPLOAD_FOLDER'] = 'static/uploads' # type: ignore
 
@@ -43,7 +41,7 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads' # type: ignore
 app.config['MAIL_SERVER'] = 'smtp.example.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.getenv('BREVO_EMAIL')
+app.config['MAIL_USERNAME'] = '849d43001@smtp-brevo.com'
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 mail = Mail(app)
  
@@ -66,7 +64,7 @@ def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password=os.getenv('DB_PASSWORD'),
+        password="Gowtham*7",
         database="gym_management"
     )
 
@@ -155,8 +153,8 @@ def register():
  
 
 def send_email_otp(email, otp):
-    sender_email = os.getenv('SENDER_EMAIL')
-    sender_password = os.getenv('GMAIL_APP_PASSWORD')
+    sender_email = os.getenv('jokersv023@gmail.com')
+    sender_password = os.getenv('ljtwyfvadnnuytbr')   # Use App Password
 
     msg = MIMEMultipart()
     msg['From'] = sender_email
@@ -173,6 +171,7 @@ def send_email_otp(email, otp):
         print(f"✅ OTP Sent Successfully to {email}!")
     except Exception as e:
         print(f"❌ Error Sending Email: {e}")
+        raise
 
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
@@ -180,7 +179,6 @@ def forgot_password():
     if request.method == 'POST':
         username = request.form['username']
         mobile = request.form['mobile']
-        email = request.form['email']
 
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -190,10 +188,6 @@ def forgot_password():
         user = cursor.fetchone()
 
         if user:
-            # Update email in database
-            cursor.execute("UPDATE members SET email = %s WHERE username = %s", (email, username))
-            conn.commit()
-
             # Generate OTP
             otp = random.randint(100000, 999999)
             cursor.execute("UPDATE members SET otp = %s WHERE username = %s", (otp, username))
@@ -201,10 +195,10 @@ def forgot_password():
             conn.close()
 
             # Send OTP to new email
-            send_email_otp(email, otp)
+            send_email_otp(user['email'], otp)
 
             session['username'] = username  # Store username in session
-            session['email'] = email        # Store email in session
+    
 
             return redirect(url_for('verify_otp'))
         else:
@@ -244,11 +238,12 @@ def reset_password():
     if request.method == 'POST':
         username = session.get('username')
         new_password = request.form['new_password']
+        hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("UPDATE members SET password = %s, otp = NULL WHERE username = %s", (new_password, username))
+        cursor.execute("UPDATE members SET password = %s, otp = NULL WHERE username = %s", (hashed_password, username))
         conn.commit()
         conn.close()
 
@@ -990,7 +985,7 @@ def admin_register():
         password = request.form['password']
         security_key = request.form['security_key']
 
-        if security_key != os.getenv('ADMIN_SECURITY_KEY', '8888'):
+        if security_key != "8888":
             flash("Security key is incorrect!", "error")
             return redirect('/admin/register')
 
